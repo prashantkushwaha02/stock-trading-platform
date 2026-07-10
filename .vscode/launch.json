@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "ZenTrade: Backend (Flask)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/run.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/backend",
+            "env": {
+                "FLASK_ENV": "development"
+            }
+        },
+        {
+            "name": "ZenTrade: Frontend (Static Server)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "http.server",
+            "args": [
+                "8000"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/frontend"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "ZenTrade: Full Stack (Run Both)",
+            "configurations": [
+                "ZenTrade: Backend (Flask)",
+                "ZenTrade: Frontend (Static Server)"
+            ],
+            "stopAll": true
+        }
+    ]
+}
