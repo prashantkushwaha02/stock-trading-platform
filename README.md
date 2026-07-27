@@ -1,4 +1,4 @@
-# ZenTrade - Modern Responsive Stock Trading Platform
+# ZenTrade - AI Powered Virtual Stock Trading Platform
 
 ZenTrade is a state-of-the-art virtual stock trading application inspired by platforms like Zerodha Kite, Groww, and TradingView. It features a complete Flask-based backend, a keyless hybrid market data service, and a beautiful React front-end utilizing custom glassmorphic styling, Bootstrap 5 components, and Chart.js animations.
 
