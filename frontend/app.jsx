@@ -373,26 +373,36 @@ function Topbar({ toggleTheme, theme, user, setSidebarActive, setPage, setSelect
                 <button className="btn btn-outline-secondary d-lg-none" onClick={() => setSidebarActive(true)}>
                     <i className="bi bi-list"></i>
                 </button>
-                
+
                 {/* Search Bar */}
                 <div className="position-relative flex-grow-1 max-w-400">
                     <div className="input-group">
-                        <span className="input-group-text bg-transparent border-end-0 border-color"><i className="bi bi-search text-muted"></i></span>
-                        <input 
-                            type="text" 
-                            className="form-control border-start-0 border-color glass-input text-white" 
-                            placeholder="Search stock (e.g. RELIANCE, AAPL)..."
-                            value={searchQuery}
-                            onChange={(e) => { setSearchQuery(e.target.value); setShowSuggestions(true); }}
-                            onFocus={() => setShowSuggestions(true)}
-                        />
+                        <span
+    className="input-group-text border-end-0"
+    style={{ background: '#dadde2', border: '1px solid rgba(255,255,255,0.25)' }}
+>
+    <i className="bi bi-search text-light"style={{ color: '#ffffff' }}></i>
+</span>
+<input
+    type="text"
+    className="form-control border-start-0 text-white"
+    placeholder="Search stock (e.g. RELIANCE, AAPL)..."
+    value={searchQuery}
+    onChange={(e) => { setSearchQuery(e.target.value); setShowSuggestions(true); }}
+    onFocus={() => setShowSuggestions(true)}
+    style={{
+        background: '#eff1f7',
+        border: '1px solid rgba(255,255,255,0.25)',
+        borderLeft: 'none'
+    }}
+/>
                     </div>
                     {showSuggestions && suggestions.length > 0 && (
                         <div className="position-absolute w-100 glass-card mt-2 shadow-premium overflow-hidden" style={{ zIndex: 1200 }}>
                             <ul className="list-group list-group-flush bg-transparent">
                                 {suggestions.map(s => (
-                                    <li 
-                                        key={s.symbol} 
+                                    <li
+                                        key={s.symbol}
                                         className="list-group-item bg-transparent text-white border-color list-group-item-action d-flex justify-content-between align-items-center cursor-pointer p-3"
                                         onClick={() => selectStock(s.symbol)}
                                     >
@@ -578,10 +588,13 @@ function LandingPage({ setPage, indices }) {
 // --- AUTHENTICATION VIEWS ---
 
 // 1. Login View
+
+
 function LoginView({ setPage, handleLogin, apiCall }) {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [loading, setLoading] = React.useState(false);
+    const [showPassword, setShowPassword] = React.useState(false);
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -597,43 +610,139 @@ function LoginView({ setPage, handleLogin, apiCall }) {
     };
 
     return (
-        <div className="vh-100 d-flex align-items-center justify-content-center bg-dark text-white p-3">
-            <div className="glass-card p-5 w-100 max-w-450">
-                <h3 className="fw-bold text-center mb-1 text-success">Welcome Back</h3>
-                <p className="text-center text-muted small mb-4">Enter credentials to access your trading desk</p>
-                
-                <form onSubmit={onSubmit}>
-                    <div className="mb-3">
-                        <label className="form-label text-secondary small">Email or Username</label>
-                        <input type="text" required className="form-control glass-input" value={email} onChange={e=>setEmail(e.target.value)} />
-                    </div>
-                    <div className="mb-4">
-                        <div className="d-flex justify-content-between mb-1">
-                            <label className="form-label text-secondary small mb-0">Password</label>
-                            <a href="#" onClick={() => setPage('forgot-password')} className="text-success text-12 text-decoration-none">Forgot Password?</a>
+        <div className="vh-100 d-flex bg-dark text-white overflow-hidden">
+            {/* Left branding panel - hidden on mobile */}
+            <div className="d-none d-lg-flex flex-column justify-content-between p-5 position-relative"
+                 style={{
+                     width: '45%',
+                     background: 'linear-gradient(160deg, rgba(0,184,148,0.15) 0%, rgba(15,23,42,1) 60%)',
+                     borderRight: '1px solid rgba(255,255,255,0.08)'
+                 }}>
+                <a href="#" className="fw-bold text-success fs-3 text-decoration-none" onClick={() => setPage('landing')}>
+                    <i className="bi bi-graph-up-arrow"></i> ZenTrade
+                </a>
+
+                <div>
+                    <h1 className="fw-extrabold mb-3" style={{ fontSize: '2.5rem' }}>
+                        Trade smarter,<br />risk nothing.
+                    </h1>
+                    <p className="text-secondary fs-5 mb-5" style={{ maxWidth: '380px' }}>
+                        Practice with ₹10,00,000 virtual capital and real market data — no financial risk, all the experience.
+                    </p>
+
+                    <div className="d-flex flex-column gap-3">
+                        <div className="d-flex align-items-center gap-3">
+                            <div className="bg-success bg-opacity-25 text-success rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
+                                <i className="bi bi-lightning-charge-fill"></i>
+                            </div>
+                            <span className="text-secondary">Live prices, real-time execution</span>
                         </div>
-                        <input type="password" required className="form-control glass-input" value={password} onChange={e=>setPassword(e.target.value)} />
+                        <div className="d-flex align-items-center gap-3">
+                            <div className="bg-success bg-opacity-25 text-success rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
+                                <i className="bi bi-shield-check"></i>
+                            </div>
+                            <span className="text-secondary">100% risk-free paper trading</span>
+                        </div>
+                        <div className="d-flex align-items-center gap-3">
+                            <div className="bg-success bg-opacity-25 text-success rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
+                                <i className="bi bi-cpu"></i>
+                            </div>
+                            <span className="text-secondary">AI-powered portfolio insights</span>
+                        </div>
                     </div>
-                    
-                    <button type="submit" className="btn btn-premium-primary w-100 py-3 mb-3 d-flex justify-content-center align-items-center" disabled={loading}>
-                        {loading ? <span className="spinner-border spinner-border-sm me-2"></span> : null} Sign In
-                    </button>
-                </form>
-                
-                <p className="text-center text-secondary small mb-0">
-                    New to ZenTrade? <a href="#" onClick={() => setPage('register')} className="text-success text-decoration-none fw-semibold">Create Account</a>
-                </p>
+                </div>
+
+                <p className="text-muted small mb-0">© {new Date().getFullYear()} ZenTrade. All rights reserved.</p>
+            </div>
+
+            {/* Right form panel */}
+            <div className="flex-grow-1 d-flex align-items-center justify-content-center p-4">
+                <div className="w-100 max-w-450">
+                    {/* Mobile-only logo */}
+                    <div className="d-lg-none text-center mb-4">
+                        <a href="#" className="fw-bold text-success fs-3 text-decoration-none" onClick={() => setPage('landing')}>
+                            <i className="bi bi-graph-up-arrow"></i> ZenTrade
+                        </a>
+                    </div>
+
+                    <h3 className="fw-bold mb-1">Welcome back</h3>
+                    <p className="text-muted small mb-4">Enter your credentials to access your trading desk</p>
+
+                    <form onSubmit={onSubmit}>
+                        <div className="mb-3">
+                            <label className="form-label text-secondary small">Email or Username</label>
+                            <div className="input-group">
+                                <span className="input-group-text border-end-0 pe-0" style={{ background: '#eef1fd' }}>
+                                    <i className="bi bi-person text-muted"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    required
+                                    className="form-control border-start-0"
+                                    placeholder="you@example.com"
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+                                    style={{ background: '#eef1fd' }}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mb-2">
+                            <div className="d-flex justify-content-between mb-1">
+                                <label className="form-label text-secondary small mb-0">Password</label>
+                                <a href="#" onClick={() => setPage('forgot-password')} className="text-success text-12 text-decoration-none">Forgot Password?</a>
+                            </div>
+                            <div className="input-group">
+                                <span className="input-group-text border-end-0 pe-0" style={{ background: '#eef1fd' }}>
+                                    <i className="bi bi-lock text-muted"></i>
+                                </span>
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    required
+                                    className="form-control border-start-0 border-end-0"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    style={{ background: '#eef1fd' }}
+                                />
+                                <button
+                                    type="button"
+                                    className="input-group-text border-start-0"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    tabIndex={-1}
+                                    style={{ background: '#eef1fd' }}
+                                >
+                                    <i className={`bi bi-eye${showPassword ? '-slash' : ''} text-muted`}></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="btn btn-premium-primary w-100 py-3 mt-4 mb-3 d-flex justify-content-center align-items-center"
+                            disabled={loading}
+                        >
+                            {loading ? <span className="spinner-border spinner-border-sm me-2"></span> : null} Sign In
+                        </button>
+                    </form>
+
+                    <p className="text-center text-secondary small mb-0">
+                        New to ZenTrade? <a href="#" onClick={() => setPage('register')} className="text-success text-decoration-none fw-semibold">Create Account</a>
+                    </p>
+                </div>
             </div>
         </div>
     );
 }
 
 // 2. Register View
+
 function RegisterView({ setPage, handleLogin, apiCall }) {
     const [username, setUsername] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [loading, setLoading] = React.useState(false);
+    const [showPassword, setShowPassword] = React.useState(false);
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -649,33 +758,141 @@ function RegisterView({ setPage, handleLogin, apiCall }) {
     };
 
     return (
-        <div className="vh-100 d-flex align-items-center justify-content-center bg-dark text-white p-3">
-            <div className="glass-card p-5 w-100 max-w-450">
-                <h3 className="fw-bold text-center mb-1 text-success">Create Account</h3>
-                <p className="text-center text-muted small mb-4">Start trading with ₹10,00,000 paper balance</p>
-                
-                <form onSubmit={onSubmit}>
-                    <div className="mb-3">
-                        <label className="form-label text-secondary small">Username</label>
-                        <input type="text" required className="form-control glass-input" value={username} onChange={e=>setUsername(e.target.value)} />
+        <div className="vh-100 d-flex bg-dark text-white overflow-hidden">
+            {/* Left branding panel - hidden on mobile */}
+            <div className="d-none d-lg-flex flex-column justify-content-between p-5 position-relative"
+                 style={{
+                     width: '45%',
+                     background: 'linear-gradient(160deg, rgba(0,184,148,0.15) 0%, rgba(15,23,42,1) 60%)',
+                     borderRight: '1px solid rgba(255,255,255,0.08)'
+                 }}>
+                <a href="#" className="fw-bold text-success fs-3 text-decoration-none" onClick={() => setPage('landing')}>
+                    <i className="bi bi-graph-up-arrow"></i> ZenTrade
+                </a>
+
+                <div>
+                    <h1 className="fw-extrabold mb-3" style={{ fontSize: '2.5rem' }}>
+                        Start trading with<br />zero risk today.
+                    </h1>
+                    <p className="text-secondary fs-5 mb-5" style={{ maxWidth: '380px' }}>
+                        Join thousands of traders practicing with ₹10,00,000 virtual capital and real market data.
+                    </p>
+
+                    <div className="d-flex flex-column gap-3">
+                        <div className="d-flex align-items-center gap-3">
+                            <div className="bg-success bg-opacity-25 text-success rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
+                                <i className="bi bi-wallet2"></i>
+                            </div>
+                            <span className="text-secondary">Free ₹10,00,000 starting balance</span>
+                        </div>
+                        <div className="d-flex align-items-center gap-3">
+                            <div className="bg-success bg-opacity-25 text-success rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
+                                <i className="bi bi-clock-history"></i>
+                            </div>
+                            <span className="text-secondary">Dynamic watchlists & price alerts</span>
+                        </div>
+                        <div className="d-flex align-items-center gap-3">
+                            <div className="bg-success bg-opacity-25 text-success rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
+                                <i className="bi bi-cpu"></i>
+                            </div>
+                            <span className="text-secondary">AI-powered portfolio insights</span>
+                        </div>
                     </div>
-                    <div className="mb-3">
-                        <label className="form-label text-secondary small">Email Address</label>
-                        <input type="email" required className="form-control glass-input" value={email} onChange={e=>setEmail(e.target.value)} />
+                </div>
+
+                <p className="text-muted small mb-0">© {new Date().getFullYear()} ZenTrade. All rights reserved.</p>
+            </div>
+
+            {/* Right form panel */}
+            <div className="flex-grow-1 d-flex align-items-center justify-content-center p-4">
+                <div className="w-100 max-w-450">
+                    {/* Mobile-only logo */}
+                    <div className="d-lg-none text-center mb-4">
+                        <a href="#" className="fw-bold text-success fs-3 text-decoration-none" onClick={() => setPage('landing')}>
+                            <i className="bi bi-graph-up-arrow"></i> ZenTrade
+                        </a>
                     </div>
-                    <div className="mb-4">
-                        <label className="form-label text-secondary small">Password</label>
-                        <input type="password" required className="form-control glass-input" value={password} onChange={e=>setPassword(e.target.value)} />
-                    </div>
-                    
-                    <button type="submit" className="btn btn-premium-primary w-100 py-3 mb-3 d-flex justify-content-center align-items-center" disabled={loading}>
-                        {loading ? <span className="spinner-border spinner-border-sm me-2"></span> : null} Register
-                    </button>
-                </form>
-                
-                <p className="text-center text-secondary small mb-0">
-                    Already have an account? <a href="#" onClick={() => setPage('login')} className="text-success text-decoration-none fw-semibold">Sign In</a>
-                </p>
+
+                    <h3 className="fw-bold mb-1">Create your account</h3>
+                    <p className="text-muted small mb-4">Start trading with ₹10,00,000 paper balance</p>
+
+                    <form onSubmit={onSubmit}>
+                        <div className="mb-3">
+                            <label className="form-label text-secondary small">Username</label>
+                            <div className="input-group">
+                                <span className="input-group-text border-end-0 pe-0" style={{ background: '#eef1fd' }}>
+                                    <i className="bi bi-person text-muted"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    required
+                                    className="form-control border-start-0"
+                                    placeholder="Choose a username"
+                                    value={username}
+                                    onChange={e => setUsername(e.target.value)}
+                                    style={{ background: '#eef1fd' }}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mb-3">
+                            <label className="form-label text-secondary small">Email Address</label>
+                            <div className="input-group">
+                                <span className="input-group-text border-end-0 pe-0" style={{ background: '#eef1fd' }}>
+                                    <i className="bi bi-envelope text-muted"></i>
+                                </span>
+                                <input
+                                    type="email"
+                                    required
+                                    className="form-control border-start-0"
+                                    placeholder="you@example.com"
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+                                    style={{ background: '#eef1fd' }}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mb-2">
+                            <label className="form-label text-secondary small">Password</label>
+                            <div className="input-group">
+                                <span className="input-group-text border-end-0 pe-0" style={{ background: '#eef1fd' }}>
+                                    <i className="bi bi-lock text-muted"></i>
+                                </span>
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    required
+                                    className="form-control border-start-0 border-end-0"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    style={{ background: '#eef1fd' }}
+                                />
+                                <button
+                                    type="button"
+                                    className="input-group-text border-start-0"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    tabIndex={-1}
+                                    style={{ background: '#eef1fd' }}
+                                >
+                                    <i className={`bi bi-eye${showPassword ? '-slash' : ''} text-muted`}></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="btn btn-premium-primary w-100 py-3 mt-4 mb-3 d-flex justify-content-center align-items-center"
+                            disabled={loading}
+                        >
+                            {loading ? <span className="spinner-border spinner-border-sm me-2"></span> : null} Register
+                        </button>
+                    </form>
+
+                    <p className="text-center text-secondary small mb-0">
+                        Already have an account? <a href="#" onClick={() => setPage('login')} className="text-success text-decoration-none fw-semibold">Sign In</a>
+                    </p>
+                </div>
             </div>
         </div>
     );
@@ -1962,10 +2179,12 @@ function CalculatorsView({ apiCall }) {
 }
 
 // 7. Profile View
+
 function ProfileView({ apiCall, user, setUser }) {
     const [username, setUsername] = React.useState(user ? user.username : '');
     const [email, setEmail] = React.useState(user ? user.email : '');
     const [password, setPassword] = React.useState('');
+    const [showPassword, setShowPassword] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
 
     const handleUpdate = (e) => {
@@ -1992,39 +2211,127 @@ function ProfileView({ apiCall, user, setUser }) {
     };
 
     return (
-        <div className="container py-2 max-w-600 mx-auto">
-            <div className="glass-card p-5">
-                <h4 className="fw-bold mb-1">User Settings</h4>
-                <p className="text-muted small mb-4">Edit profile parameters and reset account margins</p>
+        <div className="container-fluid py-2">
+            <h4 className="fw-bold mb-4">Account Settings</h4>
 
-                <form onSubmit={handleUpdate} className="mb-4">
-                    <div className="mb-3">
-                        <label className="form-label text-secondary small">Username</label>
-                        <input type="text" required className="form-control glass-input" value={username} onChange={e=>setUsername(e.target.value)} />
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label text-secondary small">Email Address</label>
-                        <input type="email" required className="form-control glass-input" value={email} onChange={e=>setEmail(e.target.value)} />
-                    </div>
-                    <div className="mb-4">
-                        <label className="form-label text-secondary small">New Password (Leave blank to keep current)</label>
-                        <input type="password" className="form-control glass-input" value={password} onChange={e=>setPassword(e.target.value)} placeholder="••••••••" />
-                    </div>
-                    <button type="submit" className="btn btn-premium-primary w-100 py-3 d-flex justify-content-center align-items-center" disabled={loading}>
-                        {loading ? <span className="spinner-border spinner-border-sm me-2"></span> : null} Update Credentials
-                    </button>
-                </form>
+            <div className="row g-4">
+                {/* Left: Profile summary card */}
+                <div className="col-lg-4">
+                    <div className="glass-card p-4 text-center h-100 d-flex flex-column align-items-center justify-content-center">
+                        <div
+                            className="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold mb-3"
+                            style={{ width: '90px', height: '90px', fontSize: '2.2rem' }}
+                        >
+                            {user ? user.username[0].toUpperCase() : 'U'}
+                        </div>
+                        <h5 className="fw-bold mb-1">{user ? user.username : 'User'}</h5>
+                        <p className="text-muted small mb-3">{user ? user.email : ''}</p>
+                        <span className="badge bg-success bg-opacity-20 text-success rounded-pill px-3 py-2">
+                            {user && user.role === 'admin' ? 'Admin Account' : 'Trader Account'}
+                        </span>
 
-                <div className="border-top border-color pt-4 text-center">
-                    <h6 className="fw-bold text-white mb-3">Margins Reset Control</h6>
-                    <button className="btn btn-premium-danger px-4" onClick={handleResetBalance}>
-                        <i className="bi bi-arrow-counterclockwise me-1"></i> Reset Balance to ₹10,00,000
-                    </button>
+                        <div className="w-100 border-top border-color mt-4 pt-4">
+                            <div className="d-flex justify-content-between text-secondary small mb-2">
+                                <span>Available Margin</span>
+                                <span className="fw-semibold text-white">
+                                    ₹{user ? user.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 }) : '0.00'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right: Edit form */}
+                <div className="col-lg-8">
+                    <div className="glass-card p-5 mb-4">
+                        <h5 className="fw-bold mb-1">Edit Profile</h5>
+                        <p className="text-muted small mb-4">Update your account credentials and contact details</p>
+
+                        <form onSubmit={handleUpdate}>
+                            <div className="row g-3 mb-3">
+                                <div className="col-md-6">
+                                    <label className="form-label text-secondary small">Username</label>
+                                    <div className="input-group">
+                                        <span className="input-group-text border-end-0 pe-0" style={{ background: '#eef1fd' }}>
+                                            <i className="bi bi-person text-muted"></i>
+                                        </span>
+                                        <input
+                                            type="text"
+                                            required
+                                            className="form-control border-start-0"
+                                            value={username}
+                                            onChange={e => setUsername(e.target.value)}
+                                            style={{ background: '#eef1fd' }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="col-md-6">
+                                    <label className="form-label text-secondary small">Email Address</label>
+                                    <div className="input-group">
+                                        <span className="input-group-text border-end-0 pe-0" style={{ background: '#eef1fd' }}>
+                                            <i className="bi bi-envelope text-muted"></i>
+                                        </span>
+                                        <input
+                                            type="email"
+                                            required
+                                            className="form-control border-start-0"
+                                            value={email}
+                                            onChange={e => setEmail(e.target.value)}
+                                            style={{ background: '#eef1fd' }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="form-label text-secondary small">New Password</label>
+                                <div className="input-group">
+                                    <span className="input-group-text border-end-0 pe-0" style={{ background: '#eef1fd' }}>
+                                        <i className="bi bi-lock text-muted"></i>
+                                    </span>
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        className="form-control border-start-0 border-end-0"
+                                        value={password}
+                                        onChange={e => setPassword(e.target.value)}
+                                        placeholder="Leave blank to keep current password"
+                                        style={{ background: '#eef1fd' }}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="input-group-text border-start-0"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        tabIndex={-1}
+                                        style={{ background: '#eef1fd' }}
+                                    >
+                                        <i className={`bi bi-eye${showPassword ? '-slash' : ''} text-muted`}></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" className="btn btn-premium-primary px-5 py-3 d-flex justify-content-center align-items-center" disabled={loading}>
+                                {loading ? <span className="spinner-border spinner-border-sm me-2"></span> : null} Update Credentials
+                            </button>
+                        </form>
+                    </div>
+
+                    {/* Danger zone */}
+                    <div className="glass-card p-5 d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <div>
+                            <h6 className="fw-bold text-white mb-1">Margin Reset Control</h6>
+                            <p className="text-muted small mb-0">Reset your virtual cash balance back to the starting amount.</p>
+                        </div>
+                        <button className="btn btn-premium-danger px-4 py-2" onClick={handleResetBalance}>
+                            <i className="bi bi-arrow-counterclockwise me-1"></i> Reset to ₹10,00,000
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
+
 
 // 8. Admin View
 function AdminView({ apiCall }) {
